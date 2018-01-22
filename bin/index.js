@@ -25,7 +25,7 @@ const { username, password } = config;
 
 const jobNames = {
   master: 'Goolge-Chrome-Master-Build',
-  pr: 'Google-Master-Build-PR'
+  pr: 'google-chrome-pr'
 }
 
 const stream = process.stdout;
@@ -38,7 +38,7 @@ const artefactUrl = getArtefactUrl({
   build: build,
   brand: brand
 });
-console.log('Retrieving artefact from:', artefactUrl.replace(/.*\/job\//g, ''));
+console.log('Retrieving artefact from:', artefactUrl);
 
 const auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 download(
@@ -61,14 +61,12 @@ download(
     stream.write(display);
     stream.clearLine(1);
   });
-})
-  .then(() => {
-    out.end();
-    console.log('Done');
-    decompress(artefactFileName, './').then(files => {
-      console.log('done!');
-    });
+}).then(() => {
+  out.end();
+  decompress(artefactFileName, './').then(files => {
+    console.log('Done!');
   });
+});
 
 function getArtefactUrl({ job, build, brand }) {
   const url = util.format(config.url, job, build, brand, brand);
