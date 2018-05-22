@@ -34,7 +34,7 @@ const out = fs.createWriteStream(artefactFileName);
 let fileSize = 0;
 
 const artefactUrl = getArtefactUrl({
-  job: jobNames[job],
+  job: jobNames[job] || job,
   build: build,
   brand: brand
 });
