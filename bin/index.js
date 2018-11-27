@@ -24,7 +24,7 @@ if (!job || !brand || !build) {
 const { username, password } = config;
 
 const jobNames = {
-  master: 'google-office-master-pipeline',
+  master: 'google-office-dev-build-deploy',
   pr: 'google-chrome-pr'
 }
 
