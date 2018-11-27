@@ -24,7 +24,7 @@ if (!job || !brand || !build) {
 const { username, password } = config;
 
 const jobNames = {
-  master: 'Goolge-Chrome-Master-Build',
+  master: 'google-office-dev-build-deploy',
   pr: 'google-chrome-pr'
 }
 
@@ -44,10 +44,7 @@ const auth = "Basic " + new Buffer(username + ":" + password).toString("base64")
 download(
   artefactUrl,
   {
-    headers: {
-      "Authorization": auth
-    },
-    agent: https.Agent({ rejectUnauthorized: false })
+    agent: https.Agent({ rejectUnauthorized: false, keepAlive: true })
   }
 ).on('response', res => {
   fileSize = 0;
@@ -63,13 +60,15 @@ download(
   });
 }).then(() => {
   out.end();
-  decompress(artefactFileName, './').then(files => {
+  decompress(artefactFileName, './rc').then(files => {
     console.log('Done!');
   });
+}).catch((err) => {
+  console.error('error', err);
 });
 
 function getArtefactUrl({ job, build, brand }) {
-  const url = util.format(config.url, job, build, brand, brand);
+  const url = util.format(config.url, job, build, brand);
   return url;
 }
 function formatProgressDisplay({ totalSize }) {
